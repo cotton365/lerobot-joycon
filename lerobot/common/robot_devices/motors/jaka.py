@@ -12,7 +12,8 @@ from lerobot.common.robot_devices.utils import RobotDeviceAlreadyConnectedError,
 from lerobot.common.utils.utils import capture_timestamp_utc
 
 import jkrc
-
+robot = jkrc.RC("10.5.5.100")
+robot.login()
 PROTOCOL_VERSION = 0
 BAUDRATE = 1_000_000
 TIMEOUT_MS = 1000
@@ -281,7 +282,6 @@ class FeetechMotorsBus:
         self.port = port
         self.motors = motors
         self.mock = mock
-
         self.model_ctrl_table = deepcopy(MODEL_CONTROL_TABLE)
         if extra_model_control_table:
             self.model_ctrl_table.update(extra_model_control_table)
@@ -630,11 +630,6 @@ class FeetechMotorsBus:
 
         return values
 
-    def read_with_motor_ids(self, motor_models, motor_ids, data_name, num_retry=NUM_READ_RETRY):
-        if self.mock:
-            import tests.mock_scservo_sdk as scs
-        else:
-            import scservo_sdk as scs
 
         return_list = True
         if not isinstance(motor_ids, list):
@@ -721,11 +716,6 @@ class FeetechMotorsBus:
 
         return values
 
-    def write_with_motor_ids(self, motor_models, motor_ids, data_name, values, num_retry=NUM_WRITE_RETRY):
-        if self.mock:
-            import tests.mock_scservo_sdk as scs
-        else:
-            import scservo_sdk as scs
 
         if not isinstance(motor_ids, list):
             motor_ids = [motor_ids]
